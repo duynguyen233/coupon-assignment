@@ -6,34 +6,34 @@ import (
 )
 
 type CreateCouponRequest struct {
-	CouponCode  *string    `json:"coupon_code" binding:"required"`
-	Title       *string    `json:"title" binding:"required"`
-	Description *string    `json:"description" binding:"required"`
-	CouponType  *string    `json:"coupon_type" binding:"required,oneof=fixed percentage"`
-	Usage       *string    `json:"usage" binding:"required"`
-	ExpiredAt   *time.Time `json:"expired_at" binding:"required"`
-	CouponValue *float64   `json:"coupon_value" binding:"required,gt=0"`
+	CouponCode  *string            `json:"coupon_code" binding:"required"`
+	Title       *string            `json:"title" binding:"required"`
+	Description *string            `json:"description" binding:"required"`
+	CouponType  *model.CouponType  `json:"coupon_type" binding:"required,oneof=fixed percentage"`
+	Usage       *model.CouponUsage `json:"usage" binding:"required"`
+	ExpiredAt   *time.Time         `json:"expired_at" binding:"required"`
+	CouponValue *float64           `json:"coupon_value" binding:"required,gt=0"`
 }
 
 type UpdateCouponRequest struct {
-	Title       *string    `json:"title"`
-	Description *string    `json:"description"`
-	CouponType  *string    `json:"coupon_type" binding:"omitempty,oneof=fixed percentage"`
-	Usage       *string    `json:"usage"`
-	ExpiredAt   *time.Time `json:"expired_at"`
-	CouponValue *float64   `json:"coupon_value"`
+	Title       *string            `json:"title"`
+	Description *string            `json:"description"`
+	CouponType  *model.CouponType  `json:"coupon_type" binding:"omitempty,oneof=fixed percentage"`
+	Usage       *model.CouponUsage `json:"usage"`
+	ExpiredAt   *time.Time         `json:"expired_at"`
+	CouponValue *float64           `json:"coupon_value"`
 }
 
 type CouponResponse struct {
-	CouponCode  string    `json:"coupon_code"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	CouponType  string    `json:"coupon_type"`
-	Usage       string    `json:"usage"`
-	ExpiredAt   time.Time `json:"expired_at"`
-	CouponValue float64   `json:"coupon_value"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	CouponCode  string            `json:"coupon_code"`
+	Title       string            `json:"title"`
+	Description string            `json:"description"`
+	CouponType  model.CouponType  `json:"coupon_type"`
+	Usage       model.CouponUsage `json:"usage"`
+	ExpiredAt   time.Time         `json:"expired_at"`
+	CouponValue float64           `json:"coupon_value"`
+	CreatedAt   time.Time         `json:"created_at"`
+	UpdatedAt   time.Time         `json:"updated_at"`
 }
 
 func ToCouponResponse(c model.Coupon) CouponResponse {

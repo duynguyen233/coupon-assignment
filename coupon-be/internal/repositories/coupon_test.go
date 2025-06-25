@@ -21,18 +21,21 @@ func InitializeCouponRepository(t *testing.T) CouponRepository {
 		t.Fatalf("Failed to connect to database: %v", err)
 	}
 	for i := range 72 {
-		var couponType string
+		var couponType model.CouponType
+		var couponUsage model.CouponUsage
 		if i%2 == 0 {
-			couponType = "fixed"
+			couponType = model.CouponTypeFixed
+			couponUsage = model.CouponUsageManual
 		} else {
-			couponType = "percentage"
+			couponType = model.CouponTypePercentage
+			couponUsage = model.CouponUsageAuto
 		}
 		SEED_DATA = append(SEED_DATA, model.Coupon{
 			CouponCode:  "TEST" + fmt.Sprint(i),
 			Title:       "Test Coupon " + fmt.Sprint(i),
 			Description: "Description for Test Coupon " + fmt.Sprint(i),
 			CouponType:  couponType,
-			Usage:       "single",
+			Usage:       couponUsage,
 			ExpiredAt:   time.Now().AddDate(0, 0, 10),
 			CouponValue: float64(i * 10),
 		})
