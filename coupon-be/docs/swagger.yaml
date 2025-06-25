@@ -1,0 +1,396 @@
+basePath: /api
+definitions:
+  schema.CouponResponse:
+    properties:
+      coupon_code:
+        type: string
+      coupon_type:
+        type: string
+      coupon_value:
+        type: number
+      created_at:
+        type: string
+      description:
+        type: string
+      expired_at:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      usage:
+        type: string
+    type: object
+  schema.CreateCouponRequest:
+    properties:
+      coupon_code:
+        type: string
+      coupon_type:
+        enum:
+        - fixed
+        - percentage
+        type: string
+      coupon_value:
+        type: number
+      description:
+        type: string
+      expired_at:
+        type: string
+      title:
+        type: string
+      usage:
+        type: string
+    required:
+    - coupon_code
+    - coupon_type
+    - coupon_value
+    - description
+    - expired_at
+    - title
+    - usage
+    type: object
+  schema.CreateMockOrderRequest:
+    properties:
+      cost:
+        type: number
+      coupon_code:
+        type: string
+      created_at:
+        type: string
+    required:
+    - cost
+    - created_at
+    type: object
+  schema.CreateMockOrderResponse:
+    properties:
+      cost:
+        type: number
+      coupon_code:
+        type: string
+      created_at:
+        type: string
+      total_amount:
+        type: number
+    type: object
+  schema.ErrorResponse:
+    properties:
+      code:
+        type: integer
+      error:
+        example: message
+        type: string
+    type: object
+  schema.ModifyDataResponse:
+    properties:
+      id:
+        type: string
+      result:
+        type: boolean
+    type: object
+  schema.PaginationResponse-schema_CouponResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/schema.CouponResponse'
+        type: array
+      message:
+        type: string
+      paging:
+        $ref: '#/definitions/schema.Paging'
+    type: object
+  schema.Paging:
+    properties:
+      limit:
+        type: integer
+      offset:
+        type: integer
+      total:
+        type: integer
+    type: object
+  schema.Response-CouponResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/schema.CouponResponse'
+      message:
+        type: string
+    type: object
+  schema.Response-schema_CouponResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/schema.CouponResponse'
+      message:
+        type: string
+    type: object
+  schema.Response-schema_CreateMockOrderResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        $ref: '#/definitions/schema.CreateMockOrderResponse'
+      message:
+        type: string
+    type: object
+  schema.Response-string:
+    properties:
+      code:
+        type: integer
+      data:
+        type: string
+      message:
+        type: string
+    type: object
+  schema.UpdateCouponRequest:
+    properties:
+      coupon_type:
+        enum:
+        - fixed
+        - percentage
+        type: string
+      coupon_value:
+        type: number
+      description:
+        type: string
+      expired_at:
+        type: string
+      title:
+        type: string
+      usage:
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger docs for Coupon API
+  version: "1.0"
+paths:
+  /ping:
+    get:
+      consumes:
+      - application/json
+      description: Ping default
+      operationId: ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.Response-string'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/schema.ErrorResponse'
+      summary: Ping default
+      tags:
+      - Default
+  /v1/coupons:
+    get:
+      consumes:
+      - application/json
+      description: Get all coupons with pagination
+      operationId: getCoupons
+      parameters:
+      - description: Offset for pagination
+        in: query
+        name: offset
+        type: integer
+      - description: Limit for pagination
+        in: query
+        name: limit
+        type: integer
+      - description: Filter by coupon code
+        in: query
+        name: coupon_code
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.PaginationResponse-schema_CouponResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/schema.ErrorResponse'
+      summary: Get all coupons
+      tags:
+      - Coupons
+    post:
+      consumes:
+      - application/json
+      description: Create a new coupon
+      operationId: createCoupon
+      parameters:
+      - description: Coupon data
+        in: body
+        name: coupon
+        required: true
+        schema:
+          $ref: '#/definitions/schema.CreateCouponRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.Response-schema_CouponResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/schema.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/schema.ErrorResponse'
+      summary: Create a new coupon
+      tags:
+      - Coupons
+  /v1/coupons/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a coupon by its ID
+      operationId: deleteCoupon
+      parameters:
+      - description: Coupon ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.ModifyDataResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/schema.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/schema.ErrorResponse'
+      summary: Delete a coupon
+      tags:
+      - Coupons
+    get:
+      consumes:
+      - application/json
+      description: Get a coupon by its ID
+      operationId: getCouponByID
+      parameters:
+      - description: Coupon ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.Response-CouponResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/schema.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/schema.ErrorResponse'
+      summary: Get a coupon by ID
+      tags:
+      - Coupons
+    put:
+      consumes:
+      - application/json
+      description: Update a coupon by its ID
+      operationId: updateCoupon
+      parameters:
+      - description: Coupon ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated coupon data
+        in: body
+        name: coupon
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateCouponRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.CouponResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/schema.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/schema.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/schema.ErrorResponse'
+      summary: Update a coupon
+      tags:
+      - Coupons
+  /v1/orders/mock:
+    post:
+      consumes:
+      - application/json
+      description: Create a mock order with optional coupon code
+      operationId: createMockOrder
+      parameters:
+      - description: Order data
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/schema.CreateMockOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schema.Response-schema_CreateMockOrderResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/schema.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/schema.ErrorResponse'
+      summary: Create a mock order
+      tags:
+      - Orders
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

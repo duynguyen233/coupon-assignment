@@ -1,0 +1,23 @@
+app:
+  name: 'coupon-be'
+  version: '1.0.0'
+
+http:
+  port: '8080'
+
+logger:
+  log_level: 'debug'
+  rollbar_env: 'coupon-be'
+
+postgres:
+  pool_max: 2
+  url: "postgresql://u:p@h:p/db"
+
+
+lark_base:
+  app_id: 'cli_a69e584357b81010'
+  app_secret: 'kNqizAGxHxUIYKrxE93ylfWhglyCRGJ1'
+  domain: 'https://open.larksuite.com/open-apis'
+  base_token: 'Ah0fbSOjxaGmSJsEMYhlrEQpgzc'
+  table_id: 'tbl9MpShBEVuYys9'
+  

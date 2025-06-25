@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:latest
+    container_name: coupon-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123123
+      MYSQL_DATABASE: zalopay
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  redis:
+    image: redis:latest
+    container_name: coupon-redis
+    restart: always
+    ports:
+      - 6379:6379
+    environment:
+      REDIS_PASSWORD: 123123
+    volumes:
+      - redis:/data
+    networks:
+      - backend
+  
+  server:
+    container_name: coupon-be
+    build:
+      context: ./coupon-be
+      dockerfile: ../coupon-be/docker/Dockerfile.local
+    ports:
+      - 8080:8080
+    networks:
+      - backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  client:
+    container_name: coupon-fe
+    build:
+      context: ./coupon-fe
+      dockerfile: ../coupon-fe/Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - backend
+    depends_on:
+      - server
+
+networks:
+  backend:
+
+volumes:
+  mysql:
+  redis:
