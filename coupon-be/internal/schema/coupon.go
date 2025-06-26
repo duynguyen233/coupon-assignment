@@ -10,7 +10,7 @@ type CreateCouponRequest struct {
 	Title       *string            `json:"title" binding:"required"`
 	Description *string            `json:"description" binding:"required"`
 	CouponType  *model.CouponType  `json:"coupon_type" binding:"required,oneof=fixed percentage"`
-	Usage       *model.CouponUsage `json:"usage" binding:"required"`
+	Usage       *model.CouponUsage `json:"usage" binding:"required,oneof=manual auto"`
 	ExpiredAt   *time.Time         `json:"expired_at" binding:"required"`
 	CouponValue *float64           `json:"coupon_value" binding:"required,gt=0"`
 }

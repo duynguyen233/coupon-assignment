@@ -17,7 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { PAGINATION_LIMIT } from '@/constants/paginate'
 import type { Coupon } from '@/types/model/coupon'
-import { formatDateTime } from '@/utils/time'
+import { formatDateTime, isExpired } from '@/utils/time'
 import _ from 'lodash'
 import { AlertCircle, Edit, Eye, Loader2, Package, SearchIcon, Tag, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -127,10 +127,6 @@ export default function CouponList({ onViewCoupon, onEditCoupon }: CouponListPro
   useEffect(() => {
     fetchCoupons(1)
   }, [fetchCoupons])
-
-  const isExpired = (expiredAt: string) => {
-    return new Date(expiredAt) < new Date()
-  }
 
   const handleDelete = async (couponCode: string) => {
     setLoading(true)

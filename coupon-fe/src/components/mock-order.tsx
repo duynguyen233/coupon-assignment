@@ -1,5 +1,5 @@
 import { orderService } from '@/api/orders'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -9,15 +9,18 @@ import type { MockOrder as MockOrderModel } from '@/types/model/order'
 import { formatDate, formatDateTime } from '@/utils/time'
 import {
   AlertCircle,
+  ArrowUp,
   Calculator,
   Calendar as CalendarLogo,
   CheckCircle,
   ChevronDownIcon,
   Receipt,
+  Tag,
+  Ticket,
 } from 'lucide-react'
 import type React from 'react'
 import { useState } from 'react'
-import { Badge } from './ui/badge'
+import { Alert, AlertDescription } from './ui/alert'
 import { Calendar } from './ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 
@@ -72,9 +75,9 @@ export default function MockOrder() {
 
       <Separator />
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2 lg:h-[400px]">
         {/* Input Form */}
-        <Card>
+        <Card className="justify-center">
           <CardHeader>
             <CardTitle className="flex items-center">
               <Calculator className="w-5 h-5 mr-2" />
@@ -171,8 +174,70 @@ export default function MockOrder() {
             </form>
           </CardContent>
         </Card>
+        {/* Coupons */}
+        <Card className="overflow-hidden justify-center pb-1">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Ticket className="w-5 h-5 mr-2" />
+              Available Coupons
+              <span className="ml-auto text-red-500">(5 available)</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className=" overflow-y-auto h-full border-t">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <div className="py-2">
+                <Card>
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <div className="space-y-2">
+                        <CardTitle className="text-lg">Coupon Title</CardTitle>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline">
+                            <Tag className="h-4 w-4 mr-1" />
+                            <span>Coupon</span>
+                          </Badge>
+                          <Badge variant="destructive">Expired</Badge>
+                          <Badge
+                            className={`border-transparent text-primary-foreground ${
+                              'coupon.coupon_type' === 'fixed' ? 'bg-[#00CF6A]' : 'bg-[#0033C9]'
+                            }`}
+                          >
+                            {'coupon.coupon_type' === 'percentage' ? 'Percentage' : 'Fixed'}
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="flex items-center text-primary border-dashed">
+                        <span className="font-bold ml-1">
+                          {'coupon.coupon_type' === 'percentage'
+                            ? `Coupon Value%`
+                            : `Coupon Value VND`}
+                        </span>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="flex flex-rol">
+                    <div className="basis-2/3 space-y-2">
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        Description: lorem ipsum test test
+                      </p>
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        Expires: 2025-04-01
+                      </p>
+                    </div>
+                    <Button className="ml-auto bg-gray-200 text-black hover:bg-gray-700 hover:text-white">
+                      <ArrowUp className="w-4 h-4" />
+                      Apply Coupon
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
 
-        {/* Results */}
+      {/* Results */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">

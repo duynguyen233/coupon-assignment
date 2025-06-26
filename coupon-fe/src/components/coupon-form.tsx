@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+import type { CouponType, CouponUsage } from '@/types/model/coupon'
 import { formatDate } from '@/utils/time'
 import { AlertCircle, CheckCircle, ChevronDownIcon, Save } from 'lucide-react'
 import type React from 'react'
@@ -21,8 +22,8 @@ interface Coupon {
   coupon_code: string
   title: string
   description: string
-  coupon_type: 'fixed' | 'percentage'
-  usage: string
+  coupon_type: CouponType
+  usage: CouponUsage
   expired_at: string
   coupon_value: number
 }
@@ -38,7 +39,7 @@ export default function CouponForm({ coupon_code, onBack }: CouponFormProps) {
     title: '',
     description: '',
     coupon_type: 'percentage' as 'fixed' | 'percentage',
-    usage: '',
+    usage: 'manual' as 'manual' | 'auto',
     expired_at: '',
     coupon_value: 0,
   })
@@ -204,25 +205,29 @@ export default function CouponForm({ coupon_code, onBack }: CouponFormProps) {
                   min="0"
                   max={formData.coupon_type === 'percentage' ? '100' : undefined}
                   value={formData.coupon_value}
-                  onChange={(e) =>
-                    handleChange('coupon_value', Number.parseFloat(e.target.value) || 0)
-                  }
+                  onChange={(e) => handleChange('coupon_value', Number.parseFloat(e.target.value))}
                   placeholder={formData.coupon_type === 'percentage' ? '20' : '1000'}
                   required
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="usage">Usage Instructions *</Label>
-              <Textarea
-                id="usage"
-                value={formData.usage}
-                onChange={(e) => handleChange('usage', e.target.value)}
-                placeholder="e.g., Valid for all products, Minimum order $100"
-                required
-                rows={2}
-              />
+            <div className="space-y-4">
+              <Label htmlFor="usage">Usage Type *</Label>
+              <RadioGroup
+                onValueChange={(value: CouponUsage) => handleChange('usage', value)}
+                defaultValue={formData.usage}
+                className="flex flex-col"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="manual" id="manual" />
+                  <Label htmlFor="manual">Manual Apply</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="auto" id="auto" />
+                  <Label htmlFor="auto">Automatic Apply</Label>
+                </div>
+              </RadioGroup>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -21,3 +21,7 @@ export const formatDate = (dateString: string): string => {
   }
   return date.toLocaleDateString('en-GB', options)
 }
+
+export const isExpired = (expiredAt: string) => {
+  return new Date(expiredAt) < new Date()
+}
